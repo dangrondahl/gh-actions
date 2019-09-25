@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+    - master
+    - release/*
+    
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: lint
+      uses: luke142367/Docker-Lint-Action@v0.2.7
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TARGET: Dockerfile
+
+  build:
+ 
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
